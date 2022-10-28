@@ -18,7 +18,7 @@ legal_amazon <- c("AC", "AP", "AM",  "MA", "MT", "PA", "RO", "RR", "TO")
 sh <- read_sf("data/shp") |>
   transmute(muni_id = as.integer(CD_MUN), muni = NM_MUN, state = SIGLA, area_km2 = AREA_KM2)
 
-saveRDS(sh, "data/spatial.rds")
+saveRDS(sh |> st_drop_geometry(), "data/spatial.rds")
 
 # Protected areas ---
 pa <- rbind(read_sf("data/protected_areas/WDPA_WDOECM_Sep2022_Public_BRA_shp_0"),
