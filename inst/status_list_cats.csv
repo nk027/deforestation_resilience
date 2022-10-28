@@ -1,0 +1,116 @@
+status,n,cat
+800 - Quitado por pagamento de parcelamento tipo PRD,874,Approved - In payment
+Ação Judicial favorável ao Ibama,15,Other
+Adesão conversão de multa 50%,2,Other
+Adesão conversão de multa 60%,93,Other
+Adesão deferida: exigibilidade suspensa(PRD),199,Written off
+Aguardando pagamento ou notificação,141,Approved - In payment
+AI homologado,2,Waiting for approval
+"AI notificado, via edital, p/alegações finais",3920,Waiting for approval
+Ajuizado,32832,Judicious
+Analisar admi/mérito de recons. ao Superin/Gerente,111,Waiting for approval
+Análise admis/mérito de impugnação/defesa,6196,Waiting for approval
+Análise admis/mérito do recurso,4220,Waiting for approval
+Análise admis/mérito do recurso ao Conama,38,Waiting for approval
+Análise admis/mérito do recurso ao Ministro do MMA,4,Waiting for approval
+Análise admis/mérito do recurso de ofício,266,Waiting for approval
+Análise do pedido p/PREST. SERV. DE FORMA DIRETA,1,Waiting for approval
+Análise do pedido p/PREST. SERV. DE FORMA INDIRETA,1,Waiting for approval
+Análise do pedido p/prestação de serviço,4,Waiting for approval
+Análise do pedido p/recuperação ambiental,10,Waiting for approval
+Análise pedido de revisão,91,Waiting for approval
+Apólice seguro garantia judicial,1,Other
+Baixa provisória efetuada pelo CNT,24,Other
+Baixado - Defesa deferida,2166,Written off
+Baixado - Pedido revisional deferido,104,Written off
+Baixado - Recurso ao Conama deferido,14,Written off
+Baixado - Recurso ao Min. MMA deferido,9,Written off
+Baixado - recurso de ofício indeferido,222,Other
+Baixado - Recurso deferido,82,Written off
+Baixado c/base na IN 23/01.IN/IBDF 01/80,65,Written off
+Baixado c/base na IN 8/99(Port.267/88),2059,Written off
+Baixado c/base na Lei 9960/00,277,Written off
+Baixado c/base no Dec. 3179/99. P. Serviço,87,Written off
+Baixado c/base no Dec. 3179/99. PS FORMA DIRETA,2,Written off
+Baixado c/base no Dec. 3179/99. PS FORMA INDIRETA,14,Written off
+Baixado por adesão a conversão de multa,51,Other
+Baixado por cancelamento/nulidade na conciliação,3,Written off
+Baixado por determinação judicial,3756,Written off
+"Baixado por prescrição da ação execut. (Lei 9873/99,art.2º)",587,Written off - limitation period
+"Baixado por prescrição da pret. punit. (Lei 9873/99,art.1º)",12399,Written off - limitation period
+Baixado por prescrição intercorrente durante anál. jurídica,1113,Written off - limitation period
+Baixado por recuperação ambiental,48,Written off
+Baixado presc. - aguard.lim.Port.AGU 377/11-Port.PGF 916/11,18,Written off
+Cancelado,8873,Cancelled
+Cancelado na homologação (AI sem defesa),248,Cancelled
+Cancelado por falecimento ocorrido antes da const. do créd.,455,Cancelled
+Crédito ativo com óbice técnico,23,Other
+Deferimento de parcelamento extra judicial,10609,Approved - In payment
+Edital publicado,610,Approved - In payment
+Em análise pela área jurídica,17,Waiting for approval
+Em cobrança judicial,5439,Approved - In payment
+Em recuperação ambiental,16,Other
+Encerrado Procedimento do Protesto,138,Cancelled
+Enviado à DIJUR p/inscrição na dívida ativa,3722,Other
+Enviado à Protesto,56,Waiting for approval
+"Enviado da SAR à DIJUR, para homologação",251,Waiting for approval
+Execução suspensa por determ. judicial/Ped. Parcto,17,Cancelled
+Exigibidade suspensa - adesão ao Cad. Ambiental Rural (CAR),3,Cancelled
+Exigibilidade suspensa - adesão ao Pro. Reg. Ambiental (PRA),24,Cancelled
+Exigibilidade suspensa - Parcelamento pela PGF/PRD,709,Cancelled
+Exigibilidade suspensa por dec. judic. com depósito em juízo,70,Cancelled
+Exigibilidade suspensa por dec. judic. sem depósito / TAC,1689,Cancelled
+"Homologado, por pagamento (AI sem defesa)",373,Approved - In payment
+Indeferimento de parcelamento extra judicial,230,Other
+Inscrito em divida ativa no SIAFI,588,Cancelled
+Inscrito na dívida ativa,3792,Cancelled
+Insuficiência de dados p/cobrança administrativa,141,Other
+Intimado por edital,44,Judicious
+Notificado e aguardando pagamento,2605,Approved - In payment
+Notificado e aguardando pagamento/recurso,8325,Approved - In payment
+Pagamento 10% da recuperação ambiental,64,Approved - In payment
+Para homologação do debito de reincidência,9,Waiting for approval
+Para homologação/prazo de defesa,16746,Waiting for approval
+"Para nova homologação, devido a alterações",2251,Waiting for approval
+Parcelado pela 1ª vez,1038,Approved - In payment
+Parcelado pela 2ª vez,447,Approved - In payment
+Parcelado pela 3ª vez,27,Approved - In payment
+"Parcelado, sem juros adicionais",60,Approved - In payment
+Parcelamento Administrativo,7185,Approved - In payment
+Parcelamento cancelado c/saldo cobrado na justiça,54,Waiting for approval
+Parcelamento Decreto 9.760/19,71,Approved - In payment
+Parcelamento extra judicial,12148,Approved - In payment
+Parcelamento judicial,636,Approved - In payment
+Parcelamento Judicial/Extrajudicial Cancelado,167,Cancelled
+"Parcelamento rescindido (Leis 12249, 12865, 12973, 12996)",514,Cancelled
+"Parcto com redução (Leis 12249, 12865, 12973, 12996,13043))",51,Other
+Pedido de adequação do valor do débito,3,Waiting for approval
+Pedido de defesa ao Superintendente,32,Waiting for approval
+Pedido de recurso ao Conama,1,Waiting for approval
+Pedido de recurso ao Ministro do MMA,4,Waiting for approval
+Pedido de recurso ao Pres. do Ibama,21,Waiting for approval
+PRESTAÇÃO DE SERVIÇO DE FORMA DIRETA em andamento,3,Other
+Prestação de serviço em andamento,3,Other
+Processo em poder da justiça,15,Waiting for approval
+Processo suspenso por dec. Judicial,46,Cancelled
+"Quitado p/pagto à vista (Leis 12249,12865,12973,12996,13043)",516,Approved - In payment
+Quitado por conversão de renda,266,Approved - In payment
+"Quitado por Parcelamento (Leis 12249, 12865, 12973, 12996)",1193,Approved - In payment
+Quitado. Adjudicação de bem,64,Approved - In payment
+Quitado. Baixa automática,150242,Approved - In payment
+Quitado. Baixa manual,3974,Approved - In payment
+Quitado. Baixa manual efetuada pela CGARR,543,Approved - In payment
+Quitado. Cancelado o saldo devedor,3686,Approved - In payment
+Rescisão de parcelamento extra judicial,9451,Cancelled
+Rescisão de Parcelamento judicial,315,Cancelled
+Substit. p/débito acumulado,10,Other
+"Substit. p/débito acumulado (Leis 12249,12865,12973, 12996)",115,Other
+Substituição de multa por advertência,296,Cancelled
+Substituição de multa por advertência ¿ 2ª instância,4,Cancelled
+Substituído na homologação por outro AI,373,Waiting for approval
+Baixado c/base na IN 42/04. Port. 440/89,1,Written off
+Estado inicial de lançamento,1,Other
+Quitado. Cobrança múltipla,1,Approved - In payment
+"Em DA, com valor insuficiente p/ cobrança judicial",1,Other
+Em REPARAÇÃO de dano ambiental,1,Other
+Análise do pedido de adesão(PRD),1,Waiting for approval
