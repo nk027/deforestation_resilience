@@ -270,7 +270,7 @@ cairo_pdf("outputs/fines_v_fined_status.pdf", 12, 7, pointsize = 16)
 v_fined_out_canc_status |> filter(year_fined >= 2000, year_fined < 2022) |>
   ggplot(aes(x = year_fined, y = fined / 1e6, fill = status_cat)) +
   geom_bar(position = "stack", stat = "identity") +
-  labs(x = "Year fined", y = "BRL fined (mio)", title = "Fine status (value)") +
+  labs(x = "Year fined", y = "BRL fined (mio)", title = "Fine status (by value)") +
   theme_minimal() +
   scale_fill_manual(values = ggthemes::colorblind_pal()(8)[-1]) +
   theme(
@@ -298,7 +298,7 @@ cairo_pdf("outputs/fines_n_paid_by_fined_year.pdf", 12, 7, pointsize = 16)
 v_dated |>
   ggplot(aes(x = year_paid, y = n_payments, fill = `Year fined`)) +
   geom_bar(position = "stack", stat = "identity") +
-  labs(x = "Year paid", y = "Number of Payments") +
+  labs(x = "Year paid", y = "Number of Payments", title = "Fine payments") +
   theme_minimal() +
   scale_fill_manual(values = ggthemes::colorblind_pal()(8)[-1]) +
   theme(
@@ -314,7 +314,7 @@ cairo_pdf("outputs/fines_v_paid_by_fined_year.pdf", 12, 7, pointsize = 16)
 v_dated |>
   ggplot(aes(x = year_paid, y = brl_paid / 1e6, fill = `Year fined`)) +
   geom_bar(position = "stack", stat = "identity") +
-  labs(x = "", y = "BRL paid (mio)") +
+  labs(x = "Year paid", y = "BRL paid (mio)", title = "Fine payments (by value)") +
   theme_minimal() +
   scale_fill_manual(values = ggthemes::colorblind_pal()(8)[-1]) +
   theme(
