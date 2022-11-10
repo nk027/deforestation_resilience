@@ -249,7 +249,7 @@ n_fined_out_canc_status <- d_fines |>
   count()
 
 # Fine status
-cairo_pdf("outputs/fines_n_fined_status.pdf", 12, 7, pointsize = 16)
+cairo_pdf("outputs/fines_n_fined_status.pdf", 10, 5, pointsize = 12)
 n_fined_out_canc_status |> filter(year_fined >= 2000, year_fined < 2022) |>
   ggplot(aes(x = year_fined, y = n, fill = status_cat)) +
   geom_bar(position = "stack", stat = "identity") +
@@ -260,13 +260,13 @@ n_fined_out_canc_status |> filter(year_fined >= 2000, year_fined < 2022) |>
     text = element_text(family = "Noto Sans"),
     legend.position = "bottom", legend.title = element_blank(),
     plot.title = element_text(size = 24, family = "Merriweather"),
-    axis.title = element_text(size = 16),
-    legend.text = element_text(size = 16),
+    axis.title = element_text(size = 14),
+    legend.text = element_text(size = 14),
     axis.text = element_text(size = 12))
 dev.off()
 
 # Fine status by value
-cairo_pdf("outputs/fines_v_fined_status.pdf", 12, 7, pointsize = 16)
+cairo_pdf("outputs/fines_v_fined_status.pdf", 10, 5, pointsize = 12)
 v_fined_out_canc_status |> filter(year_fined >= 2000, year_fined < 2022) |>
   ggplot(aes(x = year_fined, y = fined / 1e6, fill = status_cat)) +
   geom_bar(position = "stack", stat = "identity") +
@@ -287,14 +287,14 @@ v_dated <- d_fines |> filter(year_fined >= 2000, year_paid >= 2000, year_paid < 
   !(id_ai == "9099708 - E" | (name %in%
   c("GUILHERME GALVANE BATISTA", "AMAGGI EXPORTAÇÃO E IMPORTAÇÃO LTDA", "BUNGE ALIMENTOS SA") &
   muni == "Porto Velho"))) |>
-  group_by(year_paid, year_fined) |>
-  summarise(n_payments = n(), brl_paid = sum(value_paid, na.rm = TRUE)) |>
   mutate(`Year fined` = cut(year_fined, c(1999, 2003, 2008, 2013, 2018, 2021, Inf))) |>
+  group_by(year_paid, `Year fined`) |>
+  summarise(n_payments = n(), brl_paid = sum(value_paid, na.rm = TRUE)) |>
   ungroup()
 v_dated$`Year fined` <- factor(v_dated$`Year fined`,
   labels = c("2000-2003", "2004-2008", "2009-2013", "2014-2018", "2019-2021"))
 
-cairo_pdf("outputs/fines_n_paid_by_fined_year.pdf", 12, 7, pointsize = 16)
+cairo_pdf("outputs/fines_n_paid_by_fined_year.pdf", 10, 5, pointsize = 12)
 v_dated |>
   ggplot(aes(x = year_paid, y = n_payments, fill = `Year fined`)) +
   geom_bar(position = "stack", stat = "identity") +
@@ -310,7 +310,7 @@ v_dated |>
     axis.text = element_text(size = 12))
 dev.off()
 
-cairo_pdf("outputs/fines_v_paid_by_fined_year.pdf", 12, 7, pointsize = 16)
+cairo_pdf("outputs/fines_v_paid_by_fined_year.pdf", 10, 5, pointsize = 12)
 v_dated |>
   ggplot(aes(x = year_paid, y = brl_paid / 1e6, fill = `Year fined`)) +
   geom_bar(position = "stack", stat = "identity") +
