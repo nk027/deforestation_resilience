@@ -112,7 +112,7 @@ d_paid <- d_paid |>
 # In one case the date in d_paid appears to be typo'd --- we fix this manually
 pos_wrong_date <- which(d_paid$id_ai == "30823 - B" & d_paid$date_paid == "997-12-30")
 pos_right_date <- which(d_paid$id_ai == "30823 - B" & d_paid$date_paid == "1997-12-30")[1]
-d_paid[pos_wrong_date, "date_paid"] <- d_paid[pos_right_dare, "date_paid"]
+d_paid[pos_wrong_date, "date_paid"] <- d_paid[pos_right_date, "date_paid"]
 
 # In one case the date of payment is completely off --- we remove it (1225 BRL)
 d_paid <- d_paid |> filter(date_paid != "1200-10-05")
