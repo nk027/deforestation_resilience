@@ -3,8 +3,9 @@
 library("sf")
 library("dplyr")
 
-d <- readRDS("data/land_use_change.rds") |> full_join(readRDS("data/spatial.rds"),
-  by = c("muni", "state"))
+d <- readRDS("data/land_use_change.rds") |>
+  full_join(readRDS("data/spatial.rds"), by = c("muni", "state"))
+d <- d |> st_set_geometry(d$geom)
 
 d <- d |> left_join(readRDS("data/fines.rds"), by = c("muni", "state", "year")) |>
   tidyr::replace_na(list(n_fined = 0, brl_fined = 0, n_payments = 0, brl_paid = 0,
@@ -35,4 +36,5 @@ dd <- d |> group_by(muni_id) |> mutate(
   intensity_n = (n_fined - n_outlier_cancelled) / pmax(1, forest_loss)
 )
 
-saveRDS(dd |> st_drop_geometry(), "data/df_merged.rds")
+saveRDS(dd |> st_drop_geometry(), "data/df_merged.rds") # Small sized
+# saveRDS(dd, "data/df_spatial.rds") # Large, used for maps

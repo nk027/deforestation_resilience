@@ -1,5 +1,6 @@
 
 # Visualise the fines ---
+library("sf")
 library("dplyr")
 library("ggplot2")
 
@@ -78,7 +79,7 @@ d_fines |> filter(year_fined > 2018) |> filter(!(id_ai == "9099708 - E" | (name 
 # Plots -----
 
 # Plots on forest loss, fines and their values, and related intensities ---
-df_merged <- readRDS("data/df_merged.rds")
+df_merged <- readRDS("data/df_merged.rds") |> st_drop_geometry()
 
 df_plot_int <- df_merged |> filter(state %in% legal_amazon, year > 2000) |>
   select(year, state, muni, forest_loss, brl_fined, brl_cancelled,
@@ -325,3 +326,44 @@ v_dated |>
     legend.text = element_text(size = 16),
     axis.text = element_text(size = 12))
 dev.off()
+
+
+# Maps on forest loss and fines ---
+library("tmap")
+
+sh <- readRDS("data/df_spatial.rds")
+sh <- sh |> filter(state %in% legal_amazon, year > 2000) |>
+  mutate(forest_loss_pct = forest_loss / area_ha)
+
+t <- sh |> filter(year %in% c(2011:2021)) |>
+  rename(`Forest loss` = forest_loss) |>
+  tm_shape() +
+  tm_fill("Forest loss", style = "fixed", palette = "viridis", showNA = FALSE,
+    breaks = c(0, 10000, 25000, 50000, 100000, 150000, 200000)) +
+  tm_polygons(col = "#eeeeee") +
+  tm_facets(by = "year", free.coords = FALSE) +
+  tm_layout(frame = FALSE, fontfamily = "Noto Sans",
+    outer.bg.color = "transparent", bg.color = "transparent",
+    inner.margins = c(0.01, 0.01, 0.01, 0.01), outer.margins = c(0, 0, 0, 0),
+    legend.position = c("left", "bottom"), legend.frame = FALSE,
+    legend.text.size = 1, legend.title.size = 1.2,
+    panel.label.size = 1.2, panel.label.height = 1)
+
+tmap_save(t, "outputs/forest_loss.png", device = png, width = 8, height = 6)
+
+
+t <- sh |> filter(year %in% c(2011:2021)) |>
+  rename(`Fine number` = n_fined) |>
+  tm_shape() +
+  tm_fill("Fine number", style = "fixed", palette = "viridis", showNA = FALSE,
+    breaks = c(0, 1, 10, 50, 100, 200, 1000)) +
+  tm_polygons(col = "#eeeeee") +
+  tm_facets(by = "year", free.coords = FALSE) +
+  tm_layout(frame = FALSE, fontfamily = "Noto Sans",
+    outer.bg.color = "transparent", bg.color = "transparent",
+    inner.margins = c(0.01, 0.01, 0.01, 0.01), outer.margins = c(0, 0, 0, 0),
+    legend.position = c("left", "bottom"), legend.frame = FALSE,
+    legend.text.size = 1, legend.title.size = 1.2,
+    panel.label.size = 1.2, panel.label.height = 1)
+
+tmap_save(t, "outputs/fine_count.png", device = png, width = 8, height = 6)

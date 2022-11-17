@@ -14,9 +14,9 @@ ufs <- structure(names(states), names = states)
 legal_amazon <- c("AC", "AP", "AM",  "MA", "MT", "PA", "RO", "RR", "TO")
 
 # Plain shapefile with municipalities ---
-sh <- read_sf("data/shp") |>
+sh <- read_sf("data/shp/muni.gpkg") |>
   transmute(muni_id = as.integer(CD_MUN), muni = NM_MUN, state = SIGLA, area_km2 = AREA_KM2)
-saveRDS(sh |> st_drop_geometry(), "data/spatial.rds")
+saveRDS(sh, "data/spatial.rds")
 
 # Protected areas ---
 
