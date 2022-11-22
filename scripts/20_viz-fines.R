@@ -13,6 +13,7 @@ states <- c("AC" = "Acre", "AL" = "Alagoas", "AP" = "Amapá", "AM" = "Amazonas",
 ufs <- structure(names(states), names = states)
 legal_amazon <- c("AC", "AP", "AM",  "MA", "MT", "PA", "RO", "RR", "TO")
 
+df_merged <- readRDS("data/df_merged.rds") |> filter(year > 2000)
 d_fines <- readRDS("data/fines_raw.rds")
 d_fines <- d_fines |>
   filter(state %in% legal_amazon) |>
@@ -74,11 +75,29 @@ d_fines |> filter(year_fined > 2018) |> filter(!(id_ai == "9099708 - E" | (name 
   summarise(fined = sum(value_fined, na.rm = TRUE), paid = sum(value_paid, na.rm = TRUE)) |>
   mutate(share = paid / fined)
 
+# Relevance of  São Félix do Xingu and Altamira, PA
+fl_1 <- df_merged |> filter(grepl("São Félix do Xingu", muni)) |> pull(forest_loss)
+fl_2 <- df_merged |> filter(grepl("Altamira$", muni)) |> pull(forest_loss)
+
+fl_a <- df_merged |> group_by(year) |>
+  summarise(fl = sum(forest_loss, na.rm = TRUE)) |> pull(fl)
+plot(x = 2001:2021, (fl_1 + fl_2) / fl_a, ylim = c(0, .1), type = "l") # 5.2% mean, 9.6% last
+abline(h = c(0.05, .1), lty = 3, col = "gray")
+lines(2001:2021, fl_1 / fl_a, col = 2) # 3% mean, 5.3% last
+lines(2001:2021, fl_2 / fl_a, col = 3) # 2.2% mean, 4.3 % last
+legend("topleft", legend = c("São Félix do Xingu", "Altamira"), lty = 1, col = 2:3)
+
+# Cumulative loss
+f <- df_merged |> group_by(year) |>
+  summarise(f = sum(forest, na.rm = TRUE)) |> pull(f)
+plot.new()
+plot.window(c(2001, 2021), c(0.9, 1))
+axis(1, 2001:2021, pos = 0); axis(2)
+rect(seq(2000.55, 2020.55), 0, seq(2001.45, 2021.45), f / f[1], col = "darkgreen")
 
 # Plots -----
 
 # Plots on forest loss, fines and their values, and related intensities ---
-df_merged <- readRDS("data/df_merged.rds")
 
 df_plot_int <- df_merged |> filter(state %in% legal_amazon, year > 2000) |>
   select(year, state, muni, forest_loss, brl_fined, brl_cancelled,
