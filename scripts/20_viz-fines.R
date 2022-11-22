@@ -79,6 +79,7 @@ d_fines |> filter(year_fined > 2018) |> filter(!(id_ai == "9099708 - E" | (name 
 # Relevance of  São Félix do Xingu and Altamira, PA
 fl_1 <- df_merged |> filter(grepl("São Félix do Xingu", muni)) |> pull(forest_loss)
 fl_2 <- df_merged |> filter(grepl("Altamira$", muni)) |> pull(forest_loss)
+fl_3 <- df_merged |> filter(grepl("Novo Progresso", muni)) |> pull(forest_loss)
 
 fl_a <- df_merged |> group_by(year) |>
   summarise(fl = sum(forest_loss, na.rm = TRUE)) |> pull(fl)
@@ -86,6 +87,7 @@ plot(x = 2001:2021, (fl_1 + fl_2) / fl_a, ylim = c(0, .1), type = "l") # 5.2% me
 abline(h = c(0.05, .1), lty = 3, col = "gray")
 lines(2001:2021, fl_1 / fl_a, col = 2) # 3% mean, 5.3% last
 lines(2001:2021, fl_2 / fl_a, col = 3) # 2.2% mean, 4.3 % last
+lines(2001:2021, fl_3 / fl_a, col = "darkgray") # 1.2% mean, 1.6 % last
 legend("topleft", legend = c("São Félix do Xingu", "Altamira"), lty = 1, col = 2:3)
 
 # Cumulative loss
