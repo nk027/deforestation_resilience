@@ -132,15 +132,16 @@ df_plot_int <- df_merged |> filter(state %in% legal_amazon, year > 2000) |>
 yoi <- c(2003, 2011, 2016, 2019) # years to mark on x-axis
 
 # Figure for the main text ---
-cairo_pdf("outputs/fine_n_intensity_separate.pdf", height = 8, width = 8, pointsize = 16, family = "Noto Sans")
-op <- par(mar = c(0, 3, 2, 0), family = "Noto Sans")
+# cairo_pdf("outputs/fine_n_intensity_separate.pdf", height = 8, width = 8, pointsize = 16, family = "Noto Sans")
+cairo_pdf("outputs/fine_n_intensity_separate.pdf", height = 3, width = 2.5, pointsize = 8, family = "Noto Sans")
+op <- par(mar = c(0, 2.8, 1, 0), family = "Noto Sans")
 
 par(fig = c(0, 1, .7, 1)) # First plot
 plot.new()
 plot.window(xlim = c(2001, 2021), ylim = c(0, ceiling(max(df_plot_int[[2]] / 1e3, na.rm = TRUE))))
 poi <- c(0, min(df_plot_int[[2]] / 1e3, na.rm = TRUE), # y-axis marks
   mean(df_plot_int[[2]] / 1e3, na.rm = TRUE), max(df_plot_int[[2]] / 1e3, na.rm = TRUE))
-axis(2, cex.axis = 1, at = poi, labels = round(poi), las = 1)
+axis(2, cex.axis = 1, at = poi, labels = round(poi), las = 1, hadj = .8)
 rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
@@ -148,14 +149,14 @@ abline(h = poi, col = "grey40", lty = 3)
 abline(h = 0, col = "black")
 # Barplot
 rect(df_plot_int[[1]] - .35, 0, df_plot_int[[1]] + .35, df_plot_int[[2]] / 1e3, col = "#008040")
-title("Forest loss (1,000 ha)", cex.main = 1.1, family = "Merriweather Black")
+title("Forest loss (1,000 ha)", cex.main = 1, family = "Merriweather Black")
 
 par(fig = c(0, 1, .4, .7), new = TRUE) # Second plot
 plot.new()
 plot.window(xlim = c(2001, 2021), ylim = c(0, ceiling(max(df_plot_int[[8]], na.rm = TRUE))))
 poi <- c(0, min(df_plot_int[[8]], na.rm = TRUE), # y-axis marks
   mean(df_plot_int[[8]], na.rm = TRUE), max(df_plot_int[[8]], na.rm = TRUE))
-axis(2, cex.axis = 1, at = poi, round(poi), las = 1)
+axis(2, cex.axis = 1, at = poi, round(poi), las = 1, hadj = .8)
 rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
@@ -163,15 +164,15 @@ abline(h = poi, col = "grey40", lty = 3)
 abline(h = 0, col = "black")
 # Barplot
 rect(df_plot_int[[1]] - .35, 0, df_plot_int[[1]] + .35, df_plot_int[[8]], col = "#004080")
-title("Environmental fines (#)", cex.main = 1.1, family = "Merriweather Black")
+title("Environmental fines (#)", cex.main = 1, family = "Merriweather Black")
 
-par(fig = c(0, 1, 0, .4), new = TRUE, mar = c(2, 3, 2, 0)) # Third plot
+par(fig = c(0, 1, 0, .4), new = TRUE, mar = c(1.2, 3, 1, 0)) # Third plot
 plot.new()
 plot.window(xlim = c(2001, 2021), ylim = c(0, 1.1 * (max(df_plot_int[[14]] * 1e3, na.rm = TRUE))))
-axis(1, at = yoi, labels = TRUE, cex.axis = 1, pos = 0)
-poi <- c(0, min(df_plot_int[[14]] * 1e3, na.rm = TRUE), # y-axis marks
+axis(1, at = yoi, labels = c("'03", "'11", "'16", "'19"), cex.axis = 1, pos = 0, padj = -0.6)
+poi <- c(min(df_plot_int[[14]] * 1e3, na.rm = TRUE), # y-axis marks
   mean(df_plot_int[[14]] * 1e3, na.rm = TRUE), max(df_plot_int[[14]] * 1e3, na.rm = TRUE))
-axis(2, cex.axis = 1, at = poi, labels = round(poi, 2), las = 1)
+axis(2, cex.axis = 1, at = c(0, poi), labels = c(NA, round(poi, 2)), las = 1, hadj = .8)
 rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
@@ -181,15 +182,15 @@ abline(h = 0, col = "black")
 lines(df_plot_int[[1]], df_plot_int[[14]] * 1e3, lty = 1, lwd = 3, col = "#008080")
 points(df_plot_int[[1]], df_plot_int[[14]] * 1e3, pch = 16, lwd = 1.5, cex = 1, col = "#006060")
 # Add labels to the x-axis
-text(2007, .25, labels = "Lula", cex = .8, col = "#000000")
-arrows(x0 = 2003.25, x1 = 2010.75, y0 = 0, y1 = 0, length = 0.1)
-text(2013.5, .25, labels = "Rousseff", cex = .8, col = "#000000")
-arrows(x0 = 2011.25, x1 = 2015.75, y0 = 0, y1 = 0, length = 0.1)
-text(2017.5, .25, labels = "Temer", cex = .8, col = "#000000")
-arrows(x0 = 2016.25, x1 = 2018.75, y0 = 0, y1 = 0, length = 0.1)
-text(2020.5, .25, labels = "Bolsonaro", cex = .8, col = "#000000")
-arrows(x0 = 2019.25, x1 = 2023, y0 = 0, y1 = 0, length = 0.1)
-title("Fine intensity (# / 1,000 ha)", cex.main = 1.1, family = "Merriweather Black")
+# text(2007, .25, labels = "Lula", cex = .8, col = "#000000")
+arrows(x0 = 2003.25, x1 = 2010.75, y0 = 0, y1 = 0, length = 0.05)
+# text(2013.5, .25, labels = "Rousseff", cex = .8, col = "#000000")
+arrows(x0 = 2011.25, x1 = 2015.75, y0 = 0, y1 = 0, length = 0.05)
+# text(2017.5, .25, labels = "Temer", cex = .8, col = "#000000")
+arrows(x0 = 2016.25, x1 = 2018.75, y0 = 0, y1 = 0, length = 0.05)
+# text(2020.5, .25, labels = "Bolsonaro", cex = .8, col = "#000000")
+arrows(x0 = 2019.25, x1 = 2023, y0 = 0, y1 = 0, length = 0.05)
+title("Fine intensity (# / 1,000 ha)", cex.main = 1, family = "Merriweather Black")
 
 dev.off()
 
