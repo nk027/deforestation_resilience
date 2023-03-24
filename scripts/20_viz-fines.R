@@ -203,36 +203,36 @@ plot.new()
 plot.window(xlim = c(2001, 2021), ylim = c(0, ceiling(max(df_plot_int[[2]] / 1e3, na.rm = TRUE))))
 poi <- c(0, min(df_plot_int[[2]] / 1e3, na.rm = TRUE), # y-axis marks
   mean(df_plot_int[[2]] / 1e3, na.rm = TRUE), max(df_plot_int[[2]] / 1e3, na.rm = TRUE))
-axis(2, cex.axis = 1, at = poi, labels = round(poi, 0), las = 1)
+axis(2, cex.axis = 1, at = poi, labels = round(poi, 0), las = 1, hadj = .8)
 rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
 abline(h = poi, col = "grey40", lty = 3)
 abline(h = 0, col = "black")
 rect(df_plot_int[[1]] - .35, 0, df_plot_int[[1]] + .35, df_plot_int[[2]] / 1e3, col = "#008040")
-title("Forest loss (1,000 ha)", cex.main = 1.1, family = "Merriweather Black")
+title("Forest loss (1,000 ha)", cex.main = 1, family = "Merriweather Black")
 
 par(fig = c(0, 1, .4, .7), new = TRUE) # Second plot
 plot.new()
 plot.window(xlim = c(2001, 2021), ylim = c(0, ceiling(max(df_plot_int[[6]] / 1e6, na.rm = TRUE))))
 poi <- c(0, min(df_plot_int[[6]] / 1e6, na.rm = TRUE), # y-axis marks
   mean(df_plot_int[[6]] / 1e6, na.rm = TRUE), max(df_plot_int[[6]] / 1e6, na.rm = TRUE))
-axis(2, cex.axis = 1, at = poi, round(poi), las = 1)
+axis(2, cex.axis = 1, at = poi, round(poi), las = 1, hadj = .8)
 rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
 abline(h = poi, col = "grey40", lty = 3)
 abline(h = 0, col = "black")
 rect(df_plot_int[[1]] - .35, 0, df_plot_int[[1]] + .35, df_plot_int[[6]] / 1e6, col = "#004080")
-title("Environmental fines (mio BRL)", cex.main = 1.1, family = "Merriweather Black")
+title("Environmental fines (mio BRL)", cex.main = 1, family = "Merriweather Black")
 
-par(fig = c(0, 1, 0, .4), new = TRUE, mar = c(2, 3, 2, 0)) # Third plot
+par(fig = c(0, 1, 0, .4), new = TRUE, mar = c(1.2, 3, 1, 0)) # Third plot
 plot.new()
 plot.window(xlim = c(2001, 2021), ylim = c(0, 1.1 * (max(df_plot_int[[11]], na.rm = TRUE))))
-axis(1, at = yoi, labels = TRUE, cex.axis = 1, pos = 0)
-poi <- c(0, # y-axis marks
-  mean(df_plot_int[[11]], na.rm = TRUE), max(df_plot_int[[11]], na.rm = TRUE))
-axis(2, cex.axis = 1, at = poi, labels = round(poi), las = 1)
+axis(1, at = yoi, labels = c("'03", "'11", "'16", "'19"), cex.axis = 1, pos = 0, padj = -0.6)
+poi <- c(min(df_plot_int[[11]], na.rm = TRUE), 
+         mean(df_plot_int[[11]], na.rm = TRUE), max(df_plot_int[[11]], na.rm = TRUE))
+axis(2, cex.axis = 1, at = c(0, poi), labels = c(NA, round(poi, 0)), las = 1, hadj = .8)
 rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
@@ -241,20 +241,32 @@ abline(h = 0, col = "black")
 lines(df_plot_int[[1]], df_plot_int[[11]], lty = 1, lwd = 3, col = "#008080")
 points(df_plot_int[[1]], df_plot_int[[11]], pch = 16, lwd = 1.5, cex = 1, col = "#006060")
 # Add labels to the x-axis
-text(2007, 100, labels = "Lula", cex = .8, col = "#000000")
-arrows(x0 = 2003.25, x1 = 2010.75, y0 = 0, y1 = 0, length = 0.1)
-text(2013.5, 100, labels = "Rousseff", cex = .8, col = "#000000")
-arrows(x0 = 2011.25, x1 = 2015.75, y0 = 0, y1 = 0, length = 0.1)
-text(2017.5, 100, labels = "Temer", cex = .8, col = "#000000")
-arrows(x0 = 2016.25, x1 = 2018.75, y0 = 0, y1 = 0, length = 0.1)
-text(2020.5, 100, labels = "Bolsonaro", cex = .8, col = "#000000")
-arrows(x0 = 2019.25, x1 = 2023, y0 = 0, y1 = 0, length = 0.1)
-title("Fine intensity (BRL / ha)", cex.main = 1.1, family = "Merriweather Black")
+# text(2007, 100, labels = "Lula", cex = .8, col = "#000000")
+arrows(x0 = 2003.25, x1 = 2010.75, y0 = 0, y1 = 0, length = 0.05)
+# text(2013.5, 100, labels = "Rousseff", cex = .8, col = "#000000")
+arrows(x0 = 2011.25, x1 = 2015.75, y0 = 0, y1 = 0, length = 0.05)
+# text(2017.5, 100, labels = "Temer", cex = .8, col = "#000000")
+arrows(x0 = 2016.25, x1 = 2018.75, y0 = 0, y1 = 0, length = 0.05)
+# text(2020.5, 100, labels = "Bolsonaro", cex = .8, col = "#000000")
+arrows(x0 = 2019.25, x1 = 2023, y0 = 0, y1 = 0, length = 0.05)
+title("Fine intensity (BRL / ha)", cex.main = 1, family = "Merriweather Black")
 
 dev.off()
 
 
 # Supplementary Information -----
+
+# deflate fine values first
+
+gdp_defl <- readRDS("data/gdp_defl.rds") |> transmute(year, gdp_defl = gdp_defl / 100)
+
+d_fines <- d_fines |> 
+  left_join(gdp_defl |> rename(year_fined = year, defl_fined = gdp_defl), 
+                                by = c("year_fined")) |> 
+  left_join(gdp_defl |> rename(year_paid = year, defl_paid = gdp_defl), 
+            by = c("year_paid")) |> 
+  mutate(value_fined = value_fined / defl_fined, 
+         value_paid = value_paid / defl_paid)
 
 # Details about status and payment of fines ---
 v_fined_out_canc_status <- d_fines |>
