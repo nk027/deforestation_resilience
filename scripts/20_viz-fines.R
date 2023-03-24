@@ -280,7 +280,7 @@ n_fined_out_canc_status <- d_fines |>
   count()
 
 # Simplify the status for the main visualisation
-n_fined_simplified <- n_fined_out_canc_status <- d_fines |>
+n_fined_simplified <- d_fines |>
   filter(!(id_ai == "9099708 - E" | (name %in%
     c("GUILHERME GALVANE BATISTA", "AMAGGI EXPORTAÇÃO E IMPORTAÇÃO LTDA", "BUNGE ALIMENTOS SA") &
     muni == "Porto Velho"))) |>
@@ -305,7 +305,9 @@ n_fined_simplified |> filter(year_fined >= 2000, year_fined < 2022) |>
   scale_fill_manual(values = ggthemes::colorblind_pal()(5)[-1]) +
   theme(
     text = element_text(family = "Noto Sans"),
-    legend.position = "bottom", legend.title = element_blank(),
+    legend.position = c(.92, .9),
+    legend.background = element_rect(color = "white"),
+    legend.title = element_blank(),
     plot.title = element_text(size = 24, family = "Merriweather Black"),
     axis.title = element_text(size = 14),
     legend.text = element_text(size = 14),
@@ -412,10 +414,10 @@ dev.off()
 library("tmap")
 
 sh <- readRDS("data/df_spatial.rds")
-sh <- sh |> filter(state %in% legal_amazon, year > 2000) |>
+sh <- sh |> filter(state %in% legal_amazon, year > 2002) |>
   mutate(forest_loss_pct = forest_loss / area_ha)
 
-t <- sh |> filter(year %in% c(2011:2021)) |>
+t <- sh |> # filter(year %in% c(2011:2021)) |>
   rename(`Forest loss` = forest_loss) |>
   tm_shape() +
   tm_fill("Forest loss", style = "fixed", palette = "viridis", showNA = FALSE,
@@ -429,7 +431,7 @@ t <- sh |> filter(year %in% c(2011:2021)) |>
     legend.text.size = 1, legend.title.size = 1.2,
     panel.label.size = 1.2, panel.label.height = 1)
 
-tmap_save(t, "outputs/forest_loss.png", device = png, width = 8, height = 6)
+tmap_save(t, "outputs/forest_loss.png", device = png, width = 10, height = 8)
 
 
 t <- sh |> filter(year %in% c(2011:2021)) |>
@@ -446,4 +448,4 @@ t <- sh |> filter(year %in% c(2011:2021)) |>
     legend.text.size = 1, legend.title.size = 1.2,
     panel.label.size = 1.2, panel.label.height = 1)
 
-tmap_save(t, "outputs/fine_count.png", device = png, width = 8, height = 6)
+tmap_save(t, "outputs/fine_count.png", device = png, width = 7, height = 8)
