@@ -263,7 +263,19 @@ dev.off() # Store
 
 # Extra info on fines -----
 
-# Details about status and payment of fines
+# deflate fine values first
+
+gdp_defl <- readRDS("data/gdp_defl.rds") |> transmute(year, gdp_defl = gdp_defl / 100)
+
+d_fines <- d_fines |>
+  left_join(gdp_defl |> rename(year_fined = year, defl_fined = gdp_defl),
+                                by = c("year_fined")) |>
+  left_join(gdp_defl |> rename(year_paid = year, defl_paid = gdp_defl),
+            by = c("year_paid")) |>
+  mutate(value_fined = value_fined / defl_fined,
+         value_paid = value_paid / defl_paid)
+
+# Details about status and payment of fines ---
 v_fined_out_canc_status <- d_fines |>
   filter(!(id_ai == "9099708 - E" | (name %in%
     c("GUILHERME GALVANE BATISTA", "AMAGGI EXPORTAÇÃO E IMPORTAÇÃO LTDA", "BUNGE ALIMENTOS SA") &

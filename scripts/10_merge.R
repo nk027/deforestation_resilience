@@ -14,9 +14,17 @@ d <- d |> left_join(readRDS("data/fines.rds"), by = c("muni", "state", "year")) 
 d <- d |> left_join(readRDS("data/pa_df.rds") |>
   filter(year >= 2000), by = c("year", "state", "muni_id", "muni"))
 
+d <- d |> left_join(readRDS("data/gdp_defl.rds") |> transmute(year, gdp_defl = gdp_defl / 100), 
+                    by = "year")
+
 d <- d |> arrange(year, state, muni)
 
 dd <- d |> group_by(muni_id) |> mutate(
+  brl_fined = brl_fined / gdp_defl, 
+  brl_paid = brl_paid / gdp_defl, 
+  brl_cancelled = brl_cancelled / gdp_defl, 
+  brl_outlier_cancelled = brl_outlier_cancelled / gdp_defl
+) |> mutate(
   forest_loss_lag = lag(forest_loss, order_by = year),
   forest_loss_lag2 = lag(forest_loss, 2, order_by = year),
   n_fined_lag = lag(n_fined, order_by = year),
