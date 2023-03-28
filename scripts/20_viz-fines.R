@@ -24,7 +24,6 @@ d_fines <- d_fines |>
     month_year_fined = format(date_fined, "%m/%Y"),
     month_year_paid = format(date_paid, "%m/%Y"))
 
-
 # Summaries -----
 
 # In which year were fines handed out that received payments in 2022? ---
@@ -47,16 +46,17 @@ d_fines |> filter(year_paid == 2022) |>
 # How many of the fines were paid since 2019? ---
 
 # Received at least one payment: ~2%
-d_fines |> filter(year_fined > 2018, value_fined != 0,
+f_fined <- d_fines |> filter(year_fined > 2018, value_fined != 0,
   !(id_ai == "9099708 - E" | (name %in%
     c("GUILHERME GALVANE BATISTA", "AMAGGI EXPORTAÇÃO E IMPORTAÇÃO LTDA", "BUNGE ALIMENTOS SA") &
     muni == "Porto Velho"))) |>
   summarise(count = n())
-d_fines |> filter(year_fined > 2018, value_fined != 0, value_paid != 0,
+f_payment <- d_fines |> filter(year_fined > 2018, value_fined != 0, value_paid != 0,
   !(id_ai == "9099708 - E" | (name %in%
     c("GUILHERME GALVANE BATISTA", "AMAGGI EXPORTAÇÃO E IMPORTAÇÃO LTDA", "BUNGE ALIMENTOS SA") &
     muni == "Porto Velho"))) |>
   summarise(count = n())
+f_payment / f_fined
 
 # Approved but not necessarily received payment yet: ~2.5%
 d_fines |> filter(year_fined > 2018, value_fined != 0,
@@ -133,8 +133,8 @@ yoi <- c(2003, 2011, 2016, 2019) # years to mark on x-axis
 
 # Figure for the main text ---
 # cairo_pdf("outputs/fine_n_intensity_separate.pdf", height = 8, width = 8, pointsize = 16, family = "Noto Sans")
-cairo_pdf("outputs/fine_n_intensity_separate.pdf", height = 3, width = 2.5, pointsize = 8, family = "Noto Sans")
-op <- par(mar = c(0, 2.8, 1, 0), family = "Noto Sans")
+cairo_pdf("outputs/fine_n_intensity_separate.pdf", height = 9, width = 9, pointsize = 16, family = "Noto Sans")
+op <- par(mar = c(0, 3, 2, 0), family = "Noto Sans")
 
 par(fig = c(0, 1, .7, 1)) # First plot
 plot.new()
@@ -182,20 +182,20 @@ abline(h = 0, col = "black")
 lines(df_plot_int[[1]], df_plot_int[[14]] * 1e3, lty = 1, lwd = 3, col = "#008080")
 points(df_plot_int[[1]], df_plot_int[[14]] * 1e3, pch = 16, lwd = 1.5, cex = 1, col = "#006060")
 # Add labels to the x-axis
-# text(2007, .25, labels = "Lula", cex = .8, col = "#000000")
+text(2007, .25, labels = "Lula", cex = .8, col = "#000000")
 arrows(x0 = 2003.25, x1 = 2010.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2013.5, .25, labels = "Rousseff", cex = .8, col = "#000000")
+text(2013.5, .25, labels = "Rousseff", cex = .8, col = "#000000")
 arrows(x0 = 2011.25, x1 = 2015.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2017.5, .25, labels = "Temer", cex = .8, col = "#000000")
+text(2017.5, .25, labels = "Temer", cex = .8, col = "#000000")
 arrows(x0 = 2016.25, x1 = 2018.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2020.5, .25, labels = "Bolsonaro", cex = .8, col = "#000000")
+text(2020.5, .25, labels = "Bolsonaro", cex = .8, col = "#000000")
 arrows(x0 = 2019.25, x1 = 2023, y0 = 0, y1 = 0, length = 0.05)
 title("Fine intensity (# / 1,000 ha)", cex.main = 1, family = "Merriweather Black")
 
 dev.off()
 
 # Supplement variant with values instead of counts
-cairo_pdf("outputs/fine_v_intensity_separate.pdf", height = 8, width = 8, pointsize = 16, family = "Noto Sans")
+cairo_pdf("outputs/fine_v_intensity_separate.pdf", height = 9, width = 9, pointsize = 16, family = "Noto Sans")
 op <- par(mar = c(0, 3, 2, 0), family = "Noto Sans")
 
 par(fig = c(0, 1, .7, 1)) # First plot
@@ -241,13 +241,13 @@ abline(h = 0, col = "black")
 lines(df_plot_int[[1]], df_plot_int[[11]], lty = 1, lwd = 3, col = "#008080")
 points(df_plot_int[[1]], df_plot_int[[11]], pch = 16, lwd = 1.5, cex = 1, col = "#006060")
 # Add labels to the x-axis
-# text(2007, 100, labels = "Lula", cex = .8, col = "#000000")
+text(2007, 90, labels = "Lula", cex = .8, col = "#000000")
 arrows(x0 = 2003.25, x1 = 2010.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2013.5, 100, labels = "Rousseff", cex = .8, col = "#000000")
+text(2013.5, 90, labels = "Rousseff", cex = .8, col = "#000000")
 arrows(x0 = 2011.25, x1 = 2015.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2017.5, 100, labels = "Temer", cex = .8, col = "#000000")
+text(2017.5, 90, labels = "Temer", cex = .8, col = "#000000")
 arrows(x0 = 2016.25, x1 = 2018.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2020.5, 100, labels = "Bolsonaro", cex = .8, col = "#000000")
+text(2020.5, 90, labels = "Bolsonaro", cex = .8, col = "#000000")
 arrows(x0 = 2019.25, x1 = 2023, y0 = 0, y1 = 0, length = 0.05)
 title("Fine intensity (BRL / ha)", cex.main = 1, family = "Merriweather Black")
 
@@ -256,13 +256,11 @@ dev.off()
 
 # Supplementary Information -----
 
-# deflate fine values first
-
+# deflate fine values
 gdp_defl <- readRDS("data/gdp_defl.rds") |> transmute(year, gdp_defl = gdp_defl / 100)
-
 d_fines <- d_fines |> 
   left_join(gdp_defl |> rename(year_fined = year, defl_fined = gdp_defl), 
-                                by = c("year_fined")) |> 
+            by = c("year_fined")) |> 
   left_join(gdp_defl |> rename(year_paid = year, defl_paid = gdp_defl), 
             by = c("year_paid")) |> 
   mutate(value_fined = value_fined / defl_fined, 
