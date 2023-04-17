@@ -99,21 +99,13 @@ legend("topleft", legend = c("Three municipalities", "São Félix do Xingu", "Al
        lty = 1, col = 1:4)
 dev.off()
 
-# Cumulative loss
-f <- df_merged |> group_by(year) |>
-  summarise(f = sum(forest, na.rm = TRUE)) |> pull(f)
-plot.new()
-plot.window(c(2003, 2021), c(0.9, 1))
-axis(1, 2003:2021, pos = 0); axis(2)
-rect(seq(2000.55, 2020.55), 0, seq(2003.45, 2021.45), f / f[1], col = "darkgreen")
-
 # Plots -----
 
 # Plots on forest loss, fines and their values, and related intensities ---
 df_merged <- readRDS("data/df_merged.rds")
 
 df_plot_int <- df_merged |> filter(state %in% legal_amazon, year > 2000) |>
-  select(year, state, muni, forest_loss, brl_fined, brl_cancelled,
+  dplyr::select(year, state, muni, forest_loss, brl_fined, brl_cancelled,
     brl_outlier_cancelled, n_fined, n_cancelled, n_outlier_cancelled) |>
   group_by(year) |>
   summarise(
@@ -141,7 +133,7 @@ df_plot_int <- df_merged |> filter(state %in% legal_amazon, year > 2000) |>
 yoi <- c(2003, 2011, 2016, 2019) # years to mark on x-axis
 
 # Figure for the main text ---
-cairo_pdf("outputs/fine_n_intensity_separate.pdf", height = 8, width = 8,
+cairo_pdf("outputs/fine_n_intensity_separate.pdf", height = 5, width = 5,
   pointsize = 12, family = "Noto Sans")
 op <- par(mar = c(0, 2.5, 1.2, 0), family = "Noto Sans")
 
@@ -156,9 +148,9 @@ rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
 abline(h = poi, col = "grey40", lty = 3)
-abline(h = 0, col = "black")
 # Barplot
 rect(df_plot_int[[1]] - .35, 0, df_plot_int[[1]] + .35, df_plot_int[[2]] / 1e3, col = "#008040")
+abline(h = 0, col = "black")
 title("Forest loss (1,000 ha)", cex.main = 1, adj = 0, family = "Merriweather Black")
 
 par(fig = c(0, 1, .4, .7), new = TRUE) # Second plot
@@ -172,15 +164,14 @@ rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
 abline(h = poi, col = "grey40", lty = 3)
-abline(h = 0, col = "black")
 # Barplot
 rect(df_plot_int[[1]] - .35, 0, df_plot_int[[1]] + .35, df_plot_int[[8]], col = "#004080")
+abline(h = 0, col = "black")
 title("Environmental fines (#)", cex.main = 1, adj = 0, family = "Merriweather Black")
 
 par(fig = c(0, 1, 0, .4), new = TRUE, mar = c(1.3, 2.5, 1.2, 0)) # Third plot
 plot.new()
 plot.window(xlim = c(2001, 2021), ylim = c(0, 1.1 * (max(df_plot_int[[14]] * 1e3, na.rm = TRUE))))
-axis(1, at = yoi, labels = c("'03", "'11", "'16", "'19"), cex.axis = .8, pos = 0, padj = -0.6)
 poi <- c(min(df_plot_int[[14]] * 1e3, na.rm = TRUE), # y-axis marks
   mean(df_plot_int[[14]] * 1e3, na.rm = TRUE), max(df_plot_int[[14]] * 1e3, na.rm = TRUE))
 axis(2, cex.axis = .8, at = c(0, poi), labels = c(NA, round(poi, 2)), las = 1, hadj = .8)
@@ -188,27 +179,28 @@ rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
 abline(h = poi, col = "grey40", lty = 3)
-abline(h = 0, col = "black")
 # Line chart
 lines(df_plot_int[[1]], df_plot_int[[14]] * 1e3, lty = 1, lwd = 2, col = "#008080")
 points(df_plot_int[[1]], df_plot_int[[14]] * 1e3, pch = 16, lwd = 1, cex = 1, col = "#006060")
+abline(h = 0, col = "black")
+axis(1, at = yoi, labels = c("'03", "'11", "'16", "'19"), cex.axis = .8, pos = 0, padj = -0.6)
 
 # Add labels to the x-axis
-text(2007, .25, labels = "Lula", cex = .8, col = "#000000")
+# text(2007, .25, labels = "Lula", cex = .8, col = "#000000")
 arrows(x0 = 2003.25, x1 = 2010.75, y0 = 0, y1 = 0, length = 0.05)
-text(2013.5, .25, labels = "Rousseff", cex = .8, col = "#000000")
+# text(2013.5, .25, labels = "Rousseff", cex = .8, col = "#000000")
 arrows(x0 = 2011.25, x1 = 2015.75, y0 = 0, y1 = 0, length = 0.05)
-text(2017.5, .25, labels = "Temer", cex = .8, col = "#000000")
+# text(2017.5, .25, labels = "Temer", cex = .8, col = "#000000")
 arrows(x0 = 2016.25, x1 = 2018.75, y0 = 0, y1 = 0, length = 0.05)
-text(2020.5, .25, labels = "Bolsonaro", cex = .8, col = "#000000")
+# text(2020.5, .25, labels = "Bolsonaro", cex = .8, col = "#000000")
 arrows(x0 = 2019.25, x1 = 2023, y0 = 0, y1 = 0, length = 0.05)
 title("Fine intensity (#/1,000 ha)", cex.main = 1, adj = 0, family = "Merriweather Black")
 
 dev.off() # Store
 
 # Supplementary variant with values instead of counts ---
-cairo_pdf("outputs/fine_v_intensity_separate.pdf", height = 8, width = 8, 
-          pointsize = 12, family = "Noto Sans")
+cairo_pdf("outputs/fine_v_intensity_separate.pdf", height = 5, width = 5, pointsize = 12, family = "Noto Sans")
+
 op <- par(mar = c(0, 2.5, 1.2, 0), family = "Noto Sans")
 
 par(fig = c(0, 1, .7, 1)) # First plot
@@ -222,9 +214,9 @@ rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
 abline(h = poi, col = "grey40", lty = 3)
-abline(h = 0, col = "black")
 # Barplot
 rect(df_plot_int[[1]] - .35, 0, df_plot_int[[1]] + .35, df_plot_int[[2]] / 1e3, col = "#008040")
+abline(h = 0, col = "black")
 title("Forest loss (1,000 ha)", cex.main = 1, adj = 0, family = "Merriweather Black")
 
 par(fig = c(0, 1, .4, .7), new = TRUE) # Second plot
@@ -238,14 +230,13 @@ rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
 abline(h = poi, col = "grey40", lty = 3)
-abline(h = 0, col = "black")
 rect(df_plot_int[[1]] - .35, 0, df_plot_int[[1]] + .35, df_plot_int[[6]] / 1e6, col = "#004080")
+abline(h = 0, col = "black")
 title("Environmental fines (mio BRL)", cex.main = 1, adj = 0, family = "Merriweather Black")
 
-par(fig = c(0, 1, 0, .4), new = TRUE, mar = c(1.3, 2.5, 1.2, 0)) # Third plot 
+par(fig = c(0, 1, 0, .4), new = TRUE, mar = c(1.3, 2.5, 1.2, 0)) # Third plot
 plot.new()
 plot.window(xlim = c(2001, 2021), ylim = c(0, 1.1 * (max(df_plot_int[[11]], na.rm = TRUE))))
-axis(1, at = yoi, labels = c("'03", "'11", "'16", "'19"), cex.axis = .8, pos = 0, padj = -0.6)
 poi <- c(min(df_plot_int[[11]], na.rm = TRUE), # y-axis marks
   mean(df_plot_int[[11]], na.rm = TRUE), max(df_plot_int[[11]], na.rm = TRUE))
 axis(2, cex.axis = .8, at = c(poi),
@@ -254,18 +245,19 @@ rect(yoi[1], -1e6, yoi[2], 1e6, density = NA, border = NA, col = "grey90")
 rect(yoi[3], -1e6, yoi[4], 1e6, density = NA, border = NA, col = "grey90")
 segments(yoi, -1e6, yoi, 1e6, col = "grey40", lty = 1)
 abline(h = poi, col = "grey40", lty = 3)
-abline(h = 0, col = "black")
 lines(df_plot_int[[1]], df_plot_int[[11]], lty = 1, lwd = 2, col = "#008080")
 points(df_plot_int[[1]], df_plot_int[[11]], pch = 16, lwd = 1, cex = 1, col = "#006060")
+abline(h = 0, col = "black")
+axis(1, at = yoi, labels = c("'03", "'11", "'16", "'19"), cex.axis = .8, pos = 0, padj = -0.6)
 
 # Add labels to the x-axis
-text(2007, 90, labels = "Lula", cex = .8, col = "#000000")
+# text(2007, 90, labels = "Lula", cex = .8, col = "#000000")
 arrows(x0 = 2003.25, x1 = 2010.75, y0 = 0, y1 = 0, length = 0.05)
-text(2013.5, 90, labels = "Rousseff", cex = .8, col = "#000000")
+# text(2013.5, 90, labels = "Rousseff", cex = .8, col = "#000000")
 arrows(x0 = 2011.25, x1 = 2015.75, y0 = 0, y1 = 0, length = 0.05)
-text(2017.5, 90, labels = "Temer", cex = .8, col = "#000000")
+# text(2017.5, 90, labels = "Temer", cex = .8, col = "#000000")
 arrows(x0 = 2016.25, x1 = 2018.75, y0 = 0, y1 = 0, length = 0.05)
-text(2020.5, 90, labels = "Bolsonaro", cex = .8, col = "#000000")
+# text(2020.5, 90, labels = "Bolsonaro", cex = .8, col = "#000000")
 arrows(x0 = 2019.25, x1 = 2023, y0 = 0, y1 = 0, length = 0.05)
 title("Fine intensity (BRL/ha)", cex.main = 1, adj = 0, family = "Merriweather Black")
 
@@ -277,12 +269,12 @@ dev.off() # Store
 # deflate fine values
 gdp_defl <- readRDS("data/gdp_defl.rds") |> transmute(year, gdp_defl = gdp_defl / 100)
 
-d_fines <- d_fines |> 
-  left_join(gdp_defl |> rename(year_fined = year, defl_fined = gdp_defl), 
-            by = c("year_fined")) |> 
-  left_join(gdp_defl |> rename(year_paid = year, defl_paid = gdp_defl), 
-            by = c("year_paid")) |> 
-  mutate(value_fined = value_fined / defl_fined, 
+d_fines <- d_fines |>
+  left_join(gdp_defl |> rename(year_fined = year, defl_fined = gdp_defl),
+                                by = c("year_fined")) |>
+  left_join(gdp_defl |> rename(year_paid = year, defl_paid = gdp_defl),
+            by = c("year_paid")) |>
+  mutate(value_fined = value_fined / defl_fined,
          value_paid = value_paid / defl_paid)
 
 # Details about status and payment of fines ---
@@ -415,46 +407,3 @@ v_dated |>
     legend.text = element_text(size = 12),
     axis.text = element_text(size = 12))
 dev.off()
-
-
-# Maps on forest loss and fines ---
-library("tmap")
-
-sh <- readRDS("data/df_spatial.rds")
-sh <- sh |> filter(state %in% legal_amazon, year > 2002) |>
-  mutate(forest_loss_pct = forest_loss / area_ha)
-
-t <- sh |>
-  rename(`Forest loss` = forest_loss) |>
-  tm_shape() +
-  tm_fill("Forest loss", style = "fixed", palette = "viridis", showNA = FALSE,
-    breaks = c(0, 10000, 25000, 50000, 100000, 150000, 200000)) +
-  tm_polygons(col = "#eeeeee") +
-  tm_facets(by = "year", free.coords = FALSE) +
-  tm_layout(frame = FALSE, fontfamily = "Noto Sans",
-    outer.bg.color = "transparent", bg.color = "transparent",
-    inner.margins = c(0.01, 0.01, 0.01, 0.01), outer.margins = c(0, 0, 0, 0),
-    legend.outside.position = "bottom", legend.position = c(0.8, 1), 
-    legend.frame = FALSE,
-    legend.text.size = 0.6, legend.title.size = 0.8,
-    panel.label.size = 1, panel.label.height = 1)
-
-tmap_save(t, "outputs/forest_loss.png", device = png, width = 10, height = 8)
-
-
-t <- sh |>
-  rename(`Fine number` = n_fined) |>
-  tm_shape() +
-  tm_fill("Fine number", style = "fixed", palette = "viridis", showNA = FALSE,
-    breaks = c(0, 1, 10, 50, 100, 200, 1000)) +
-  tm_polygons(col = "#eeeeee") +
-  tm_facets(by = "year", free.coords = FALSE) +
-  tm_layout(frame = FALSE, fontfamily = "Noto Sans",
-    outer.bg.color = "transparent", bg.color = "transparent",
-    inner.margins = c(0.01, 0.01, 0.01, 0.01), outer.margins = c(0, 0, 0, 0),
-    legend.outside.position = "bottom", legend.position = c(0.8, 1), 
-    legend.frame = FALSE,
-    legend.text.size = 0.6, legend.title.size = 0.8,
-    panel.label.size = 1, panel.label.height = 1)
-
-tmap_save(t, "outputs/fine_count.png", device = png, width = 10, height = 8)
