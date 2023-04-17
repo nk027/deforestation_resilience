@@ -14,7 +14,7 @@ states <- c("AC" = "Acre", "AL" = "Alagoas", "AP" = "Amapá", "AM" = "Amazonas",
 ufs <- structure(names(states), names = states)
 legal_amazon <- c("AC", "AP", "AM",  "MA", "MT", "PA", "RO", "RR", "TO")
 
-df_merged <- readRDS("data/df_merged.rds") |> filter(year > 2000)
+
 d_fines <- readRDS("data/fines_raw.rds")
 d_fines <- d_fines |>
   filter(state %in% legal_amazon) |>
@@ -76,32 +76,41 @@ d_fines |> filter(year_fined > 2018) |> filter(!(id_ai == "9099708 - E" | (name 
   summarise(fined = sum(value_fined, na.rm = TRUE), paid = sum(value_paid, na.rm = TRUE)) |>
   mutate(share = paid / fined)
 
-# Relevance of  São Félix do Xingu and Altamira, PA
+# Relevance of São Félix do Xingu, Altamira, and Novo Progresso (all in PA)
+df_merged <- readRDS("data/df_merged.rds") |> filter(year > 2002, state %in% legal_amazon)
+
 fl_1 <- df_merged |> filter(grepl("São Félix do Xingu", muni)) |> pull(forest_loss)
 fl_2 <- df_merged |> filter(grepl("Altamira$", muni)) |> pull(forest_loss)
 fl_3 <- df_merged |> filter(grepl("Novo Progresso", muni)) |> pull(forest_loss)
 
 fl_a <- df_merged |> group_by(year) |>
   summarise(fl = sum(forest_loss, na.rm = TRUE)) |> pull(fl)
-plot(x = 2001:2021, (fl_1 + fl_2) / fl_a, ylim = c(0, .1), type = "l") # 5.2% mean, 9.6% last
+
+
+cairo_pdf("outputs/def_hotspot_munis.pdf", height = 5, width = 8,
+          pointsize = 12, family = "Noto Sans")
+plot(x = 2003:2021, (fl_1 + fl_2 + fl_3) / fl_a, ylim = c(0, .12), type = "l", 
+     xlab = "", ylab = "Share on total deforestation") # 6.4% mean, 11.3% last
 abline(h = c(0.05, .1), lty = 3, col = "gray")
-lines(2001:2021, fl_1 / fl_a, col = 2) # 3% mean, 5.3% last
-lines(2001:2021, fl_2 / fl_a, col = 3) # 2.2% mean, 4.3 % last
-lines(2001:2021, fl_3 / fl_a, col = "darkgray") # 1.2% mean, 1.6 % last
-legend("topleft", legend = c("São Félix do Xingu", "Altamira"), lty = 1, col = 2:3)
+lines(2003:2021, fl_1 / fl_a, col = 2) # 3% mean, 5.3% last
+lines(2003:2021, fl_2 / fl_a, col = 3) # 2.3% mean, 4.3 % last
+lines(2003:2021, fl_3 / fl_a, col = 4) # 1.2% mean, 1.6 % last
+legend("topleft", legend = c("Three municipalities", "São Félix do Xingu", "Altamira", "Novo Progresso"), 
+       lty = 1, col = 1:4)
+dev.off()
 
 # Cumulative loss
 f <- df_merged |> group_by(year) |>
   summarise(f = sum(forest, na.rm = TRUE)) |> pull(f)
 plot.new()
-plot.window(c(2001, 2021), c(0.9, 1))
-axis(1, 2001:2021, pos = 0); axis(2)
-rect(seq(2000.55, 2020.55), 0, seq(2001.45, 2021.45), f / f[1], col = "darkgreen")
+plot.window(c(2003, 2021), c(0.9, 1))
+axis(1, 2003:2021, pos = 0); axis(2)
+rect(seq(2000.55, 2020.55), 0, seq(2003.45, 2021.45), f / f[1], col = "darkgreen")
 
 # Plots -----
 
 # Plots on forest loss, fines and their values, and related intensities ---
- df_merged <- readRDS("data/df_merged.rds") |> st_drop_geometry()
+df_merged <- readRDS("data/df_merged.rds") |> st_drop_geometry()
 
 df_plot_int <- df_merged |> filter(state %in% legal_amazon, year > 2000) |>
   select(year, state, muni, forest_loss, brl_fined, brl_cancelled,
@@ -440,9 +449,10 @@ t <- sh |> # filter(year %in% c(2011:2021)) |>
   tm_layout(frame = FALSE, fontfamily = "Noto Sans",
     outer.bg.color = "transparent", bg.color = "transparent",
     inner.margins = c(0.01, 0.01, 0.01, 0.01), outer.margins = c(0, 0, 0, 0),
-    legend.position = c("left", "bottom"), legend.frame = FALSE,
-    legend.text.size = 1, legend.title.size = 1.2,
-    panel.label.size = 1.2, panel.label.height = 1)
+    legend.outside.position = "bottom", legend.position = c(0.8, 1), 
+    legend.frame = FALSE,
+    legend.text.size = 0.6, legend.title.size = 0.8,
+    panel.label.size = 1, panel.label.height = 1)
 
 tmap_save(t, "outputs/forest_loss.png", device = png, width = 10, height = 8)
 
@@ -457,8 +467,9 @@ t <- sh |> # filter(year %in% c(2011:2021)) |>
   tm_layout(frame = FALSE, fontfamily = "Noto Sans",
     outer.bg.color = "transparent", bg.color = "transparent",
     inner.margins = c(0.01, 0.01, 0.01, 0.01), outer.margins = c(0, 0, 0, 0),
-    legend.position = c("left", "bottom"), legend.frame = FALSE,
-    legend.text.size = 1, legend.title.size = 1.2,
-    panel.label.size = 1.2, panel.label.height = 1)
+    legend.outside.position = "bottom", legend.position = c(0.8, 1), 
+    legend.frame = FALSE,
+    legend.text.size = 0.6, legend.title.size = 0.8,
+    panel.label.size = 1, panel.label.height = 1)
 
 tmap_save(t, "outputs/fine_count.png", device = png, width = 10, height = 8)
