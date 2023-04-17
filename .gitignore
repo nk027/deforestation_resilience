@@ -1,4 +1,4 @@
 data/shp/*
 data/spatial_geom.rds
 data/df_spatial.rds
-outputs/*
+.Rproj.user
