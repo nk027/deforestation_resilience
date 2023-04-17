@@ -1,5 +1,5 @@
+# Visualize the fines ---
 
-# Visualise the fines ---
 library("sf")
 library("dplyr")
 library("ggplot2")
@@ -110,7 +110,7 @@ rect(seq(2000.55, 2020.55), 0, seq(2003.45, 2021.45), f / f[1], col = "darkgreen
 # Plots -----
 
 # Plots on forest loss, fines and their values, and related intensities ---
-df_merged <- readRDS("data/df_merged.rds") |> st_drop_geometry()
+df_merged <- readRDS("data/df_merged.rds")
 
 df_plot_int <- df_merged |> filter(state %in% legal_amazon, year > 2000) |>
   select(year, state, muni, forest_loss, brl_fined, brl_cancelled,
@@ -316,6 +316,7 @@ ha <- list(
 for(i in seq_along(ha))
   n_fined_simplified$status_cat[n_fined_simplified$status_cat %in% ha[[i]]] <- names(ha)[i]
 
+# Fine status summarized
 cairo_pdf("outputs/fines_n_fined_status-summarised.pdf", 10, 5, pointsize = 12)
 n_fined_simplified |> filter(year_fined >= 2000, year_fined < 2022) |>
   group_by(year_fined, status_cat) |>
@@ -332,10 +333,12 @@ n_fined_simplified |> filter(year_fined >= 2000, year_fined < 2022) |>
     legend.title = element_blank(),
     plot.title = element_text(size = 24, family = "Merriweather Black"),
     axis.title = element_text(size = 14),
-    legend.text = element_text(size = 14),
+    legend.text = element_text(size = 12),
     axis.text = element_text(size = 12))
 dev.off()
 
+
+# Fine status by number
 cairo_pdf("outputs/fines_n_fined_status.pdf", 10, 5, pointsize = 12)
 n_fined_out_canc_status |> filter(year_fined >= 2000, year_fined < 2022) |>
   ggplot(aes(x = year_fined, y = n, fill = status_cat)) +
@@ -348,25 +351,7 @@ n_fined_out_canc_status |> filter(year_fined >= 2000, year_fined < 2022) |>
     legend.position = "bottom", legend.title = element_blank(),
     plot.title = element_text(size = 24, family = "Merriweather Black"),
     axis.title = element_text(size = 14),
-    legend.text = element_text(size = 14),
-    axis.text = element_text(size = 12))
-dev.off()
-
-
-# Fine status
-cairo_pdf("outputs/fines_n_fined_status.pdf", 10, 5, pointsize = 12)
-n_fined_out_canc_status |> filter(year_fined >= 2000, year_fined < 2022) |>
-  ggplot(aes(x = year_fined, y = n, fill = status_cat)) +
-  geom_bar(position = "stack", stat = "identity") +
-  labs(x = "Year fined", y = "Number of fines", title = "Fine status") +
-  theme_minimal() +
-  scale_fill_manual(values = ggthemes::colorblind_pal()(8)[-1]) +
-  theme(
-    text = element_text(family = "Noto Sans"),
-    legend.position = "bottom", legend.title = element_blank(),
-    plot.title = element_text(size = 24, family = "Merriweather Black"),
-    axis.title = element_text(size = 14),
-    legend.text = element_text(size = 14),
+    legend.text = element_text(size = 12),
     axis.text = element_text(size = 12))
 dev.off()
 
@@ -382,8 +367,8 @@ v_fined_out_canc_status |> filter(year_fined >= 2000, year_fined < 2022) |>
     text = element_text(family = "Noto Sans"),
     legend.position = "bottom", legend.title = element_blank(),
     plot.title = element_text(size = 24, family = "Merriweather Black"),
-    axis.title = element_text(size = 16),
-    legend.text = element_text(size = 16),
+    axis.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
     axis.text = element_text(size = 12))
 dev.off()
 
@@ -410,8 +395,8 @@ v_dated |>
     text = element_text(family = "Noto Sans"),
     legend.position = "bottom", legend.title = element_text(size = 16),
     plot.title = element_text(size = 24, family = "Merriweather Black"),
-    axis.title = element_text(size = 16),
-    legend.text = element_text(size = 16),
+    axis.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
     axis.text = element_text(size = 12))
 dev.off()
 
@@ -426,8 +411,8 @@ v_dated |>
     text = element_text(family = "Noto Sans"),
     legend.position = "bottom", legend.title = element_text(size = 16),
     plot.title = element_text(size = 24, family = "Merriweather Black"),
-    axis.title = element_text(size = 16),
-    legend.text = element_text(size = 16),
+    axis.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
     axis.text = element_text(size = 12))
 dev.off()
 
@@ -439,7 +424,7 @@ sh <- readRDS("data/df_spatial.rds")
 sh <- sh |> filter(state %in% legal_amazon, year > 2002) |>
   mutate(forest_loss_pct = forest_loss / area_ha)
 
-t <- sh |> # filter(year %in% c(2011:2021)) |>
+t <- sh |>
   rename(`Forest loss` = forest_loss) |>
   tm_shape() +
   tm_fill("Forest loss", style = "fixed", palette = "viridis", showNA = FALSE,
@@ -457,7 +442,7 @@ t <- sh |> # filter(year %in% c(2011:2021)) |>
 tmap_save(t, "outputs/forest_loss.png", device = png, width = 10, height = 8)
 
 
-t <- sh |> # filter(year %in% c(2011:2021)) |>
+t <- sh |>
   rename(`Fine number` = n_fined) |>
   tm_shape() +
   tm_fill("Fine number", style = "fixed", palette = "viridis", showNA = FALSE,
