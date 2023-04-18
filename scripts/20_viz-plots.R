@@ -89,13 +89,13 @@ fl_a <- df_merged |> group_by(year) |>
 
 cairo_pdf("outputs/def_hotspot_munis.pdf", height = 5, width = 8,
           pointsize = 12, family = "Noto Sans")
-plot(x = 2003:2021, (fl_1 + fl_2 + fl_3) / fl_a, ylim = c(0, .12), type = "l", 
+plot(x = 2003:2021, (fl_1 + fl_2 + fl_3) / fl_a, ylim = c(0, .12), type = "l",
      xlab = "", ylab = "Share on total deforestation") # 6.4% mean, 11.3% last
 abline(h = c(0.05, .1), lty = 3, col = "gray")
 lines(2003:2021, fl_1 / fl_a, col = 2) # 3% mean, 5.3% last
 lines(2003:2021, fl_2 / fl_a, col = 3) # 2.3% mean, 4.3 % last
 lines(2003:2021, fl_3 / fl_a, col = 4) # 1.2% mean, 1.6 % last
-legend("topleft", legend = c("Three municipalities", "São Félix do Xingu", "Altamira", "Novo Progresso"), 
+legend("topleft", legend = c("Three municipalities", "São Félix do Xingu", "Altamira", "Novo Progresso"),
        lty = 1, col = 1:4)
 dev.off()
 
@@ -131,7 +131,6 @@ df_plot_int <- df_merged |> filter(state %in% legal_amazon, year > 2000) |>
     int_n_out_canc = (n_fined - n_outlier_cancelled) / pmax(1, forest_loss))
 
 yoi <- c(2003, 2011, 2016, 2019) # years to mark on x-axis
-
 # Figure for the main text ---
 cairo_pdf("outputs/fine_n_intensity_separate.pdf", height = 5, width = 5,
   pointsize = 12, family = "Noto Sans")
@@ -186,13 +185,13 @@ abline(h = 0, col = "black")
 axis(1, at = yoi, labels = c("'03", "'11", "'16", "'19"), cex.axis = .8, pos = 0, padj = -0.6)
 
 # Add labels to the x-axis
-# text(2007, .25, labels = "Lula", cex = .8, col = "#000000")
+# text(2007, .25, labels = "Lula", cex = .7, col = "#000000")
 arrows(x0 = 2003.25, x1 = 2010.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2013.5, .25, labels = "Rousseff", cex = .8, col = "#000000")
+# text(2013.5, .25, labels = "Rousseff", cex = .7, col = "#000000")
 arrows(x0 = 2011.25, x1 = 2015.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2017.5, .25, labels = "Temer", cex = .8, col = "#000000")
+# text(2017.5, .25, labels = "Temer", cex = .7, col = "#000000")
 arrows(x0 = 2016.25, x1 = 2018.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2020.5, .25, labels = "Bolsonaro", cex = .8, col = "#000000")
+# text(2020.5, .25, labels = "Bolsonaro", cex = .7, col = "#000000")
 arrows(x0 = 2019.25, x1 = 2023, y0 = 0, y1 = 0, length = 0.05)
 title("Fine intensity (#/1,000 ha)", cex.main = 1, adj = 0, family = "Merriweather Black")
 
@@ -251,13 +250,13 @@ abline(h = 0, col = "black")
 axis(1, at = yoi, labels = c("'03", "'11", "'16", "'19"), cex.axis = .8, pos = 0, padj = -0.6)
 
 # Add labels to the x-axis
-# text(2007, 90, labels = "Lula", cex = .8, col = "#000000")
+# text(2007, 140, labels = "Lula", cex = .7, col = "#000000")
 arrows(x0 = 2003.25, x1 = 2010.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2013.5, 90, labels = "Rousseff", cex = .8, col = "#000000")
+# text(2013.5, 140, labels = "Rousseff", cex = .7, col = "#000000")
 arrows(x0 = 2011.25, x1 = 2015.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2017.5, 90, labels = "Temer", cex = .8, col = "#000000")
+# text(2017.5, 140, labels = "Temer", cex = .7, col = "#000000")
 arrows(x0 = 2016.25, x1 = 2018.75, y0 = 0, y1 = 0, length = 0.05)
-# text(2020.5, 90, labels = "Bolsonaro", cex = .8, col = "#000000")
+# text(2020.5, 140, labels = "Bolsonaro", cex = .7, col = "#000000")
 arrows(x0 = 2019.25, x1 = 2023, y0 = 0, y1 = 0, length = 0.05)
 title("Fine intensity (BRL/ha)", cex.main = 1, adj = 0, family = "Merriweather Black")
 

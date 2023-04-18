@@ -1,2 +1,3 @@
 
-Code accompanying "Eroding resilience of deforestation interventions — evidence from Brazil’s lost decade"
+# Eroding resilience of deforestation interventions — evidence from Brazil’s lost decade
+## Replication material
