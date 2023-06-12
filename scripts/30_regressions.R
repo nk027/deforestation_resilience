@@ -41,6 +41,9 @@ df_reg <- df_reg |> arrange(muni_id, year) |> group_by(muni_id) |>
     cattle = lag(cattle, order_by = year),
     pa_ind_km2 = lag(pa_ind_km2, order_by = year),
     pa_tot_km2 = lag(pa_tot_km2, order_by = year),
+    g4_ms = lag(g4_ms, order_by = year),
+    tac_ms = lag(tac_ms, order_by = year),
+    zdc_ms = lag(zdc_ms, order_by = year),
     n_fined_wo_out = lag(n_fined_wo_out, order_by = year),
     brl_fined_wo_out = lag(brl_fined_wo_out, order_by = year),
     n_fined_wo_out_lag2 = lag(n_fined_wo_out, order_by = year),
@@ -542,21 +545,41 @@ o_cov3 <- coeftest(ols_cov_mod3, vcov = vcovCL, cluster = ~muni_id)
 o_cov4 <- coeftest(ols_cov_mod4, vcov = vcovCL, cluster = ~muni_id)
 
 vcov_o_cov1 <- vcovCL(ols_cov_mod1, cluster = ~muni_id) 
+# Test of effects in pre-COVID period (2016-2019)
+summary(glht(ols_cov_mod1, linfct =  c("`log(1 + n_fined_wo_out)` + 
+                                       `log(1 + n_fined_wo_out):pre_covid` = 0"), 
+             vcov = vcov_o_cov1)) 
+# Test of effects in pre-2016 period
 summary(glht(ols_cov_mod1, linfct =  c("`log(1 + n_fined_wo_out)` + 
                                        `log(1 + n_fined_wo_out):lr_comb` = 0"), 
              vcov = vcov_o_cov1)) 
 
-vcov_o_cov3 <- vcovCL(ols_cov_mod3, cluster = ~muni_id) 
+vcov_o_cov3 <- vcovCL(ols_cov_mod3, cluster = ~muni_id)
+# Test of effects in pre-COVID period (2016-2019)
+summary(glht(ols_cov_mod3, linfct =  c("`log(1 + n_fined_wo_out)` + 
+                                       `log(1 + n_fined_wo_out):pre_covid` = 0"), 
+             vcov = vcov_o_cov3, coef = na.omit(coef(ols_cov_mod3))))
+# Test of effects in pre-2016 period
 summary(glht(ols_cov_mod3, linfct =  c("`log(1 + n_fined_wo_out)` + 
                                        `log(1 + n_fined_wo_out):lr_comb` = 0"), 
              vcov = vcov_o_cov3, coef = na.omit(coef(ols_cov_mod3))))
 
-vcov_o_cov2 <- vcovCL(ols_cov_mod2, cluster = ~muni_id) 
+vcov_o_cov2 <- vcovCL(ols_cov_mod2, cluster = ~muni_id)
+# Test of effects in pre-COVID period (2016-2019)
+summary(glht(ols_cov_mod2, linfct =  c("`log(1 + brl_fined_wo_out)` + 
+                                       `log(1 + brl_fined_wo_out):pre_covid` = 0"), 
+             vcov = vcov_o_cov2)) 
+# Test of effects in pre-2016 period
 summary(glht(ols_cov_mod2, linfct =  c("`log(1 + brl_fined_wo_out)` + 
                                        `log(1 + brl_fined_wo_out):lr_comb` = 0"), 
              vcov = vcov_o_cov2)) 
 
-vcov_o_cov4 <- vcovCL(ols_cov_mod4, cluster = ~muni_id) 
+vcov_o_cov4 <- vcovCL(ols_cov_mod4, cluster = ~muni_id)
+# Test of effects in pre-COVID period (2016-2019)
+summary(glht(ols_cov_mod4, linfct =  c("`log(1 + brl_fined_wo_out)` + 
+                                       `log(1 + brl_fined_wo_out):pre_covid` = 0"), 
+             vcov = vcov_o_cov4, coef = na.omit(coef(ols_cov_mod4))))
+# Test of effects in pre-2016 period
 summary(glht(ols_cov_mod4, linfct =  c("`log(1 + brl_fined_wo_out)` + 
                                        `log(1 + brl_fined_wo_out):lr_comb` = 0"), 
              vcov = vcov_o_cov4, coef = na.omit(coef(ols_cov_mod4)))) 
@@ -952,6 +975,101 @@ stargazer(o_sm1, o_sm3, o_sm2, o_sm4,
                                "pre-2016", "SM treated",
                                "Fines (no.) x pre-2016", "Fines (value) x pre-2016"))
 
+#####
+# Results with control for cattle ZDC treatment based on Levy et al (2023)
+
+# without year fixed effects
+# number of fines
+ols_zdc_mod1 <- lm(log(1 + forest_loss) ~
+                    log(forest) +
+                    log(population) + log(gdp_pc) +
+                    log(1 + soy_price) + log(1 + cattle) +
+                    spei_dry +
+                    log(1 + pa_ind_km2) +
+                    log(1 + n_fined_wo_out) * lr_comb +
+                    zdc_ms +
+                    factor(muni_id)
+                  , data = df_reg)
+
+# value of fines
+ols_zdc_mod2 <- lm(log(1 + forest_loss) ~
+                    log(forest) +
+                    log(population) + log(gdp_pc) +
+                    log(1 + soy_price) + log(1 + cattle) +
+                    spei_dry +
+                    log(1 + pa_ind_km2) +
+                    log(1 + brl_fined_wo_out) * lr_comb + 
+                     zdc_ms +
+                    factor(muni_id)
+                  , data = df_reg)
+
+### with year fixed effects
+# number of fines
+ols_zdc_mod3 <- lm(log(1 + forest_loss) ~
+                    log(forest) +
+                    log(population) + log(gdp_pc) +
+                    log(1 + soy_price) + log(1 + cattle) +
+                    spei_dry +
+                    log(1 + pa_ind_km2) +
+                    log(1 + n_fined_wo_out) * lr_comb + 
+                    zdc_ms +
+                    factor(muni_id) + factor(year)
+                  , data = df_reg)
+
+# value of fines
+ols_zdc_mod4 <- lm(log(1 + forest_loss) ~
+                    log(forest) +
+                    log(population) + log(gdp_pc) +
+                    log(1 + soy_price) + log(1 + cattle) +
+                    spei_dry +
+                    log(1 + pa_ind_km2) +
+                    log(1 + brl_fined_wo_out) * lr_comb + 
+                    zdc_ms +
+                    factor(muni_id) + factor(year)
+                  , data = df_reg)
+
+# cluster standard errors
+o_zdc1 <- coeftest(ols_zdc_mod1, vcov = vcovCL, cluster = ~muni_id)
+o_zdc2 <- coeftest(ols_zdc_mod2, vcov = vcovCL, cluster = ~muni_id)
+o_zdc3 <- coeftest(ols_zdc_mod3, vcov = vcovCL, cluster = ~muni_id)
+o_zdc4 <- coeftest(ols_zdc_mod4, vcov = vcovCL, cluster = ~muni_id)
+
+vcov_o_zdc1 <- vcovCL(ols_zdc_mod1, cluster = ~muni_id) 
+summary(glht(ols_zdc_mod1, linfct =  c("`log(1 + n_fined_wo_out)` + 
+                                      `log(1 + n_fined_wo_out):lr_comb` = 0"), 
+             vcov = vcov_o_zdc1)) 
+
+vcov_o_zdc3 <- vcovCL(ols_zdc_mod3, cluster = ~muni_id) 
+summary(glht(ols_zdc_mod3, linfct =  c("`log(1 + n_fined_wo_out)` + 
+                                      `log(1 + n_fined_wo_out):lr_comb` = 0"), 
+             vcov = vcov_o_zdc3, coef = na.omit(coef(ols_zdc_mod3)))) 
+
+vcov_o_zdc2 <- vcovCL(ols_zdc_mod2, cluster = ~muni_id) 
+summary(glht(ols_zdc_mod2, linfct =  c("`log(1 + brl_fined_wo_out)` + 
+                                      `log(1 + brl_fined_wo_out):lr_comb` = 0"), 
+             vcov = vcov_o_zdc2)) 
+
+vcov_o_zdc4 <- vcovCL(ols_zdc_mod4, cluster = ~muni_id) 
+summary(glht(ols_zdc_mod4, linfct =  c("`log(1 + brl_fined_wo_out)` + 
+                                      `log(1 + brl_fined_wo_out):lr_comb` = 0"), 
+             vcov = vcov_o_zdc4, coef = na.omit(coef(ols_zdc_mod4)))) 
+
+stargazer(o_zdc1, o_zdc3, o_zdc2, o_zdc4,
+          keep.stat = c("n", "rsq", "adj.rsq"),
+          omit = c("year", "muni_id"), type = "latex",
+          column.sep.width = "-10pt", no.space = TRUE,
+          font.size = "footnotesize", header = FALSE,
+          dep.var.labels = "Forest loss", 
+          title = "OLS regression with fines, with ZDC market share included",
+          add.lines = list(c("Year FE", "No", "Yes", "No", "Yes"), 
+                           c("Unit FE", rep("Yes", 4))),
+          covariate.labels = c("Forest", "Population", "GDP p.c.", "Soy price", "Cattle",
+                               "SPEI dry", "Indigenous areas", 
+                               "Fines (no.)", "Fines (value)",
+                               "pre-2016", "ZDC market share",
+                               "Fines (no.) x pre-2016", "Fines (value) x pre-2016"))
+
+
 
 #####
 # Results with dummy for Amazon biome-only municipalities
@@ -1314,6 +1432,85 @@ stargazer(o_mv_trip1, o_mv_trip3, o_mv_trip2, o_mv_trip4,
                                "pre-2016 x Priority Municipality", 
                                "Fines (no.) x pre-2016 x Priority Municipality",
                                "Fines (value) x pre-2016 x Priority Municipality"))
+
+
+
+
+#####
+# Results with triple interaction with share of indigenous areas
+
+# without year fixed effects
+# number of fines
+ols_ind_trip_mod1 <- lm(log(1 + forest_loss) ~
+                         log(forest) +
+                         log(population) + log(gdp_pc) +
+                         log(1 + soy_price) + log(1 + cattle) +
+                         spei_dry +
+                         log(1 + n_fined_wo_out) * lr_comb * log(1 + pa_ind_km2) +
+                         factor(muni_id)
+                       , data = df_reg)
+
+# value of fines
+ols_ind_trip_mod2 <- lm(log(1 + forest_loss) ~
+                         log(forest) +
+                         log(population) + log(gdp_pc) +
+                         log(1 + soy_price) + log(1 + cattle) +
+                         spei_dry +
+                         log(1 + brl_fined_wo_out) * lr_comb * log(1 + pa_ind_km2) +
+                         factor(muni_id)
+                       , data = df_reg)
+
+
+### with year fixed effects
+# number of fines
+ols_ind_trip_mod3 <- lm(log(1 + forest_loss) ~
+                         log(forest) +
+                         log(population) + log(gdp_pc) +
+                         log(1 + soy_price) + log(1 + cattle) +
+                         spei_dry +
+                         log(1 + n_fined_wo_out) * lr_comb * log(1 + pa_ind_km2) + 
+                         factor(muni_id) + factor(year)
+                       , data = df_reg)
+
+# value of fines
+ols_ind_trip_mod4 <- lm(log(1 + forest_loss) ~
+                         log(forest) +
+                         log(population) + log(gdp_pc) +
+                         log(1 + soy_price) + log(1 + cattle) +
+                         spei_dry +
+                         log(1 + brl_fined_wo_out) * lr_comb * log(1 + pa_ind_km2) +
+                         factor(muni_id) + factor(year)
+                       , data = df_reg)
+
+# cluster standard errors
+o_ind_trip1 <- coeftest(ols_ind_trip_mod1, vcov = vcovCL, cluster = ~muni_id)
+o_ind_trip2 <- coeftest(ols_ind_trip_mod2, vcov = vcovCL, cluster = ~muni_id)
+o_ind_trip3 <- coeftest(ols_ind_trip_mod3, vcov = vcovCL, cluster = ~muni_id)
+o_ind_trip4 <- coeftest(ols_ind_trip_mod4, vcov = vcovCL, cluster = ~muni_id)
+
+
+stargazer(o_ind_trip1, o_ind_trip3, o_ind_trip2, o_ind_trip4,
+          omit = c("year", "muni_id"), type = "latex",
+          column.sep.width = "-10pt", no.space = TRUE,
+          font.size = "footnotesize", header = FALSE,
+          dep.var.labels = "Forest loss", 
+          title = "OLS regression with additional interaction of indigenous areas with regime",
+          add.lines = list(c("Year FE", "No", "Yes", "No", "Yes"), 
+                           c("Unit FE", rep("Yes", 4))),
+          covariate.labels = c("Forest", "Population", "GDP p.c.", "Soy price", "Cattle",
+                               "SPEI dry", 
+                               "Fines (no.)", "Fines (value)",
+                               "pre-2016", 
+                               "Indigenous areas", 
+                               "Fines (no.) x pre-2016",
+                               "Fines (no.) x Indigenous areas",
+                               "Fines (value) x pre-2016",
+                               "Fines (value) x Indigenous areas",
+                               "Indigenous areas x pre-2016",
+                               "Fines (no.) x Indigenous areas x pre-2016",
+                               "Fines (value) x Indigenous areas x pre-2016"))
+
+
 
 
 #####

@@ -18,7 +18,7 @@ d <- d |> left_join(readRDS("data/gdp.rds"), by = c("year", "state", "muni_id", 
 
 d <- d |> left_join(readRDS("data/pop.rds"), by = c("year", "state", "muni_id", "muni"))
 
-d <- d |> left_join(readRDS("data/cattle_head.rds") |> select(muni_id, year, cattle), 
+d <- d |> left_join(readRDS("data/cattle_head.rds") |> dplyr::select(muni_id, year, cattle), 
                     by = c("year", "muni_id"))
 
 d <- d |> left_join(readRDS("data/soy_tons.rds") |> filter(crop == "soy") |>
@@ -42,14 +42,18 @@ d <- d |> left_join(readRDS("data/gdp_defl.rds") |> transmute(year, gdp_defl = g
 d <- d |> mutate(muni_temp = tolower(muni)) |> 
   left_join(readRDS("data/mverde_participation.rds") |> 
               mutate(muni_temp = tolower(muni)) |> 
-              select(-muni), 
+              dplyr::select(-muni), 
             by = c("state", "muni_temp", "year")) |> 
   tidyr::replace_na(list(mverde = 0)) |> 
-  select(-muni_temp)
+  dplyr::select(-muni_temp)
 
 d <- d |> 
   left_join(readRDS("data/SM_treatment.rds"), by = c("muni_id", "year")) |> 
   tidyr::replace_na(list(sm_pot = 0, sm_treat = 0))
+
+d <- d |> 
+  left_join(readRDS("data/ZDC_cattle.rds"), by = c("muni_id", "year")) |> 
+  tidyr::replace_na(list(g4_ms = 0, tac_ms = 0, zdc_ms = 0))
 
 d <- d |> arrange(year, state, muni)
 
