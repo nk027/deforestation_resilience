@@ -999,7 +999,7 @@ ols_zdc_mod2 <- lm(log(1 + forest_loss) ~
                     spei_dry +
                     log(1 + pa_ind_km2) +
                     log(1 + brl_fined_wo_out) * lr_comb + 
-                     zdc_ms +
+                    zdc_ms +
                     factor(muni_id)
                   , data = df_reg)
 
@@ -1161,8 +1161,9 @@ stargazer(o_ad1, o_ad3, o_ad2, o_ad4,
                            c("Unit FE", rep("Yes", 4))),
           covariate.labels = c("Forest", "Population", "GDP p.c.", "Soy price", "Cattle",
                                "SPEI dry", "Indigenous areas", 
+                               "Amazon biome",
                                "Fines (no.)", "Fines (value)",
-                               "pre-2016", "Amazon biome",
+                               "pre-2016", 
                                "Fines (no.) x pre-2016", "Fines (value) x pre-2016"))
 
 
